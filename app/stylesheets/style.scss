@@ -1,0 +1,20 @@
+@import 'bootstrap_custom';
+@import 'codemirror';
+@import 'flow-show';
+
+form, div[ng-form] {
+  .help-block.errors {
+    display: none;
+  }
+  .form-group.has-error {
+    .help-block.errors {
+      display: block;
+    }
+  }
+}
+
+th.actions {
+  a + a {
+    padding-left: 10px;
+  }
+}

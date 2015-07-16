@@ -1,0 +1,9 @@
+html(ng-app='flowApp')
+  head
+    title Flow
+    link(href="/assets/stylesheets/style.css" media="all" rel="stylesheet")
+    script(src="/assets/javascripts/vendor.js" type="text/javascript")
+    script(src="/assets/javascripts/build.js" type="text/javascript")
+    script(src="/assets/javascripts/templates.js" type="text/javascript")
+  body(ng-controller="AppController as app")
+    .container-fluid(style='margin: 15px 0;' ng-viewport='')

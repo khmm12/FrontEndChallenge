@@ -1,0 +1,14 @@
+.container
+  h4.text-center Flows
+  flow-create(flows='flows.flows')
+  table.table
+    thead
+      tr
+        th Title
+        th Actions
+    tbody
+      tr(ng-repeat='flow in flows.flows')
+        th(ng-bind='flow.title')
+        th.actions
+          a(ng-link='flowShow({id: flow.id})') Edit/Run
+          a(href='' ng-click='flows.destroyFlow(flow)') Delete  

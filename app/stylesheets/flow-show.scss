@@ -1,0 +1,52 @@
+.flow-show__rules {
+  padding: 0;
+}
+
+.flow-show__rules + .flow-show__new-rule {
+  margin-top: 10px;
+}
+
+.flow-show__new-rule + .flow-show__execution {
+  margin-top: 10px;
+}
+
+.flow-show__execution {
+  border: 1px solid;
+  padding: 10px;
+
+  .CodeMirror {
+    height: 70px;
+  }
+}
+
+.flow-show__rules__rule {
+  margin: 10px 0;
+  border: 1px solid;
+  padding: 10px;
+
+  .CodeMirror {
+    height: 70px;
+  }
+}
+
+.flow-show__new-rule  {
+  border: 1px solid;
+  padding: 10px;
+
+  .CodeMirror {
+    height: 70px;
+  }
+}
+
+.flow-show__execution__execution_log_line {
+  &.passed {
+    color: green;
+  }
+  &.failed {
+    color: red;
+  }
+
+  &.error {
+    color: #800000;
+  }
+}

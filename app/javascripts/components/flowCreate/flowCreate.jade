@@ -1,0 +1,9 @@
+.col-sm-6    
+  form(name='newFlowForm' ng-submit='flowCreateCtrl.submit(); newFlowForm.$setPristine()')
+    .form-group(ng-class="{'has-error': newFlowForm.title.$invalid && newFlowForm.title.$dirty}")
+      label Title
+      input.form-control(name='title' placeholder='Flow title' ng-model='flowCreateCtrl.newFlow.title' required='')
+      .help-block.errors
+        span(ng-show='newFlowForm.title.$error.required') Enter the title
+    .form-group
+      button.btn.btn-default(type='submit' ng-disabled='newFlowForm.$invalid') Submit

@@ -1,0 +1,72 @@
+.flow-show(ng-if='flowShow.flow')
+  h4.text-center
+    | Flow: {{flowShow.flow.title}}
+    
+  .container.flow-show__rules
+    h5.text-center Rules
+    .flow-show__rules__rule(ng-repeat='rule in flowShow.flow.rules track by rule.id')
+      form(name='ruleForm'  ng-submit='flowShow.saveFlow()')
+        fieldset(ng-disabled='flowShow.savingFlow')
+          .form-group(ng-class="{'has-error': ruleForm.title.$invalid && ruleForm.title.$dirty}")
+            label Title
+            input.form-control(name='title' ng-model='rule.title' required='')
+            .help-block.errors
+              span(ng-show='ruleForm.title.$error.required') Enter the rule title
+          .form-group(ng-class="{'has-error': ruleForm.body.$invalid && ruleForm.body.$dirty}")
+            label Body
+            div(ui-codemirror='flowShow.codemirrorConfig' ng-model='rule.body')
+            input(name='body' required='' style='display: none;' ng-model='rule.body')
+            .help-block.errors
+              span(ng-show='ruleForm.body.$error.required') Enter the rule body  
+          .form-group
+            label If rule passed
+            select.form-control(ng-options='item.id as item.title for item in (flowShow.flow | availableRules : rule)' ng-model='rule.passedRuleId')
+              option(value='') Choose Rule
+          .form-group
+            label If rule failed
+            select.form-control(ng-options='item.id as item.title for item in (flowShow.flow | availableRules : rule)' ng-model='rule.failedRuleId') 
+              option(value='') Choose Rule
+          .form-group
+            button.btn.btn-default(type='submit' ng-disabled='ruleForm.$invalid || flowShow.savingFlow') Save        
+    
+  .container.flow-show__new-rule  
+    a.text-center(ng-click='flowShow.newRuleFormToggle()')
+      h4 New Rule
+    form(ng-hide='flowShow.newRuleFormHiden' name='newRuleForm' ng-submit='flowShow.submitNewRule(); newRuleForm.$setPristine()')
+      fieldset(ng-disabled="flowShow.savingFlow")
+        .form-group(ng-class="{'has-error': newRuleForm.title.$invalid && newRuleForm.title.$dirty}")
+          label Title
+          input.form-control(name='title' ng-model='flowShow.newRule.title' required='')
+          .help-block.errors
+            span(ng-show='newRuleForm.title.$error.required') Enter the rule title
+        .form-group(ng-class="{'has-error': newRuleForm.body.$invalid && newRuleForm.body.$dirty}")
+          label Body
+          div(ui-codemirror="{ mode: 'Javascript', lineNumbers: true, tabSize: 2 }" ng-model='flowShow.newRule.body')
+          input(name='body' required='' style='display: none;' ng-model='flowShow.newRule.body')
+          .help-block.errors
+            span(ng-show='newRuleForm.body.$error.required') Enter the rule body
+        .form-group
+          label If rule passed
+          select.form-control(name='rulePassed' ng-options='item.id as item.title for item in (flowShow.flow | availableRules)' 
+                              ng-model='flowShow.newRule.passedRuleId')
+            option(value='') Choose Rule
+        .form-group
+          label If rule failed
+          select.form-control(name='ruleFailed' ng-model='flowShow.newRule.failedRuleId' 
+                              ng-options='item.id as item.title for item in (flowShow.flow | availableRules)')
+            option(value='') Choose Rule
+        .form-group
+          button.btn.btn-default(type='submit' ng-disabled='newRuleForm.$invalid || flowShow.savingFlow') Submit    
+                      
+                      
+  .container.flow-show__execution
+    h5.text-center Execution
+    .form-group
+      label Object
+      div(ui-codemirror="{ mode: 'Javascript', lineNumbers: true, tabSize: 2 }" ng-model='flowShow.executionObjectsBody')  
+    .form-group                                            
+      button.btn(ng-click='flowShow.executeFlow()') Execute flow
+    .container.flow-show__execution__execution_log
+       div.flow-show__execution__execution_log_line(ng-repeat='logLine in flowShow.executionLog' ng-class='logLine.type' ng-bind='logLine.title') 
+       
+h4.text-center(ng-hide='flowShow.flow') Not found       
