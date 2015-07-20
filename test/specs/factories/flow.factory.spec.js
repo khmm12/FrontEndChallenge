@@ -130,6 +130,12 @@ describe('Spec: FlowFactory', function() {
       flow.save();
       expect(store.upsert).toHaveBeenCalled();
     });
+
+    it('return promise', function() {
+      var flow = new Flow();
+      var ngPromise = $q.defer().promise.constructor;
+      expect(flow.save()).toEqual(jasmine.any(ngPromise));
+    });
   });
 
   describe('#destroy', function() {

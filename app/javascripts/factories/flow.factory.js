@@ -10,7 +10,7 @@ angular.module('flowApp').factory('Flow', ['$indexedDB', '$q', function($indexed
       $indexedDB.openStore('flows', function(store) {
         store.getAll()
         .then(function(flowsData) {
-          let flows = flowsData.map(function(flowData) { let flow = new Flow(); angular.extend(flow, flowData); return flow; })
+          let flows = flowsData.map((flowData) => angular.extend(new Flow(), flowData));
           deferred.resolve(flows);
         });
       });
@@ -22,11 +22,10 @@ angular.module('flowApp').factory('Flow', ['$indexedDB', '$q', function($indexed
       $indexedDB.openStore('flows', function(store) {
         store.find(id)
         .then(function(flowData) {
-          let flow = new Flow()
-          angular.extend(flow, flowData);
+          let flow = angular.extend(new Flow(), flowData);
           deferred.resolve(flow);
         })
-        .catch(function() { deferred.reject(); });
+        .catch(() => deferred.reject());
       });
       return deferred.promise;
     }
@@ -35,13 +34,13 @@ angular.module('flowApp').factory('Flow', ['$indexedDB', '$q', function($indexed
       var deferred = $q.defer();
       if (this.isDestroyed() || this.isNew()) {
         deferred.resolve(this);
-      } else {
-        $indexedDB.openStore('flows', (store) => {
-          store.delete(this.id)
-          .then(() => { deferred.resolve(this); })
-          .catch(function() { deferred.reject(); });
-        });
+        return deferred.promise;
       }
+      $indexedDB.openStore('flows', (store) => {
+        store.delete(this.id)
+        .then(() => deferred.resolve(this))
+        .catch(() => deferred.reject());
+      });
       return deferred.promise;
     }
 
@@ -55,22 +54,21 @@ angular.module('flowApp').factory('Flow', ['$indexedDB', '$q', function($indexed
 
     save() {
       var deferred = $q.defer();
-      if (this._destroyed) {
+      if (this.isDestroyed()) {
         deferred.resolve(this);
         return deferred.promise;
       }
       $indexedDB.openStore('flows', (store) => {
         let isNew = this.isNew();
-        if (isNew)
-          this.id = _.uuid();
+        if (isNew) this.id = _.uuid();
+
         let dataToInsert = {id: this.id, title: this.title, rules: this.rules};
-        
         if (isNew) {
           store.insert(dataToInsert)
-          .then((flow) => { deferred.resolve(this); })
+          .then((flow) => deferred.resolve(this));
         } else {
           store.upsert(dataToInsert)
-          .then((flow) => { deferred.resolve(this); })
+          .then((flow) => deferred.resolve(this));
         }
       });
       return deferred.promise;

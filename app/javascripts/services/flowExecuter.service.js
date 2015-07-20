@@ -31,11 +31,11 @@ class FlowExecuterService {
         if (executionResult) {
           let nextRule = flow.findRuleById(rule.passedRuleId);
           if (nextRule) {
-            this.pushEventToLog(executionLog, `${rule.title} Success`, 'passed');
+            this.pushEventToLog(executionLog, `${rule.title} Passed`, 'passed');
             rule = nextRule;
             continue;
           } else {
-            this.pushEventToLog(executionLog, `${rule.title} Success. End`, 'passed');
+            this.pushEventToLog(executionLog, `${rule.title} Passed. End`, 'passed');
             break;
           }
         } else {
